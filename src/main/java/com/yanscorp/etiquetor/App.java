@@ -16,6 +16,8 @@ import org.apache.pdfbox.util.Matrix;
  */
 public class App 
 {
+	static final int FONT_SIZE = 12;
+	
     public static void main( String[] args ) throws IOException
     {
         String filename = "hello.pdf";
@@ -26,7 +28,7 @@ public class App
             PDPage page = new PDPage();
             doc.addPage(page);
             
-            PDFont font = PDType1Font.HELVETICA_BOLD;
+            PDFont font = PDType1Font.TIMES_ROMAN;
 
             try (PDPageContentStream contents = new PDPageContentStream(doc, page))
             {
@@ -58,29 +60,39 @@ public class App
 						
 						for (ElementoCodigoBarras elemento : template.getElementos()) {
 							contents.saveGraphicsState();
+							Vetor tamanho;
 							
 							switch (elemento.getTipo()) {
 							case CODIGO:
-								float w = 10;
+								tamanho = new Vetor(elementWidth * elemento.getTamanho().getX() / 100.0f, elementHeight * elemento.getTamanho().getY() / 100.0f);
+								contents.transform(Matrix.getTranslateInstance(elementMargin + (elementWidth -  tamanho.getX()) / 2, elementMargin + (elementHeight - tamanho.getY()) / 2));
+								contents.setNonStrokingColor(Color.RED);
+								contents.addRect(0, 0, tamanho.getX(), tamanho.getY());
+								contents.fill();
 								break;
 
 							default:
+								contents.setFont(font, FONT_SIZE);
+								tamanho = new Vetor(font.getStringWidth("Elemento") / 1000 * FONT_SIZE, FONT_SIZE);
+								contents.beginText();
+								contents.transform(Matrix.getTranslateInstance(elementMargin + (elementWidth -  tamanho.getX()) / 2, elementMargin + (elementHeight - tamanho.getY()) / 2));
+								
+								contents.setNonStrokingColor(Color.GREEN);
+				                
+				                contents.newLineAtOffset(0, 0);
+				                contents.showText("Mensagem");
+				                contents.endText();
 								break;
 							}
+							
+							contents.restoreGraphicsState();
 						}
 						
 						contents.transform(Matrix.getTranslateInstance(elementWidth + elementMargin * 2, 0));
 					}
-					
 					m = m.multiply(Matrix.getTranslateInstance(0, elementHeight + elementMargin * 2));
-					contents.restoreGraphicsState();
-            		
+					contents.restoreGraphicsState();            		
 				}
-                contents.beginText();
-                contents.setFont(font, 12);
-                contents.newLineAtOffset(100, 700);
-                contents.showText("Mensagem");
-                contents.endText();
             }
             
             doc.save(filename);
