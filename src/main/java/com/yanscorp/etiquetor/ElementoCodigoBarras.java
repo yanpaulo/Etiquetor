@@ -25,7 +25,7 @@ public class ElementoCodigoBarras {
 
 	public ElementoCodigoBarras(TipoElementoCodigoBarras tipo, AlinhamentoHorizontal alinhamentoHorizontal,
 			AlinhamentoVertical alinhamentoVertical, int rotacao) {
-		this(tipo, alinhamentoHorizontal, alinhamentoVertical, Vetor.zero(), rotacao, new Vetor(90, 80), 100);
+		this(tipo, alinhamentoHorizontal, alinhamentoVertical, Vetor.zero(), rotacao, new Vetor(80, 70), 100);
 		this.tipo = tipo;
 		this.alinhamentoHorizontal = alinhamentoHorizontal;
 		this.alinhamentoVertical = alinhamentoVertical;
