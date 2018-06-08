@@ -93,9 +93,13 @@ public class App {
                                     break;
                             }
 
+                            m.translate(elemento.getAjuste().getX(), -1 * elemento.getAjuste().getY());
+
                             m.translate(tamanho.getX() / 2, tamanho.getY() / 2);
                             m.rotate(elemento.getRotacao() * Math.PI / 180);
                             m.translate(-1 * tamanho.getX() / 2, -1 * tamanho.getY() / 2);
+
+
 
                             contents.transform(m);
 
